@@ -1,0 +1,41 @@
+<div class="container mx-auto max-w-lg mt-10 p-6 bg-white shadow-md rounded-lg">
+  <h1 class="text-2xl font-semibold mb-6">Edit Employee</h1>
+
+  <%= form_with(model: @employee, local: true, class: "space-y-4") do |form| %>
+    <% if @employee.errors.any? %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">There were <%= pluralize(@employee.errors.count, "error") %> with your submission</strong>
+        <ul>
+          <% @employee.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+    <% end %>
+
+    <div class="flex flex-col">
+      <%= form.label :employee_id, "Employee ID", class: "font-medium text-gray-700" %>
+      <%= form.text_field :employee_id, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-bule-500 focus:border-blue-500 sm:text-sm", maxlength: 5, required: true %>
+      <small class="text-gray-500">Alphanumeric, max 5 characters</small>
+    </div>
+
+    <div class="flex flex-col mt-4">
+      <%= form.label :name, "Name", class: "font-medium text-gray-700" %>
+      <%= form.text_field :name, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-bule-500 focus:border-blue-500 sm:text-sm", required: true %>
+    </div>
+
+    <div class="flex flex-col mt-4">
+      <%= form.label :phone, "Phone (Optional)", class: "font-medium text-gray-700" %>
+      <%= form.text_field :phone, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-bule-500 focus:border-blue-500 sm:text-sm", maxlength: 11 %>
+      <small class="text-gray-500">Numeric, max 11 digits</small>
+    </div>
+
+    <div class="mt-4">
+      <%= form.submit "Update Employee", class: "w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+    </div>
+  <% end %>
+
+  <div class="mt-4 flex justify-between">
+    <%= link_to "Show Employee", @employee, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= link_to "Back to List", employees_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+</div>

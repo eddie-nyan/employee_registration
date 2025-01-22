@@ -1,0 +1,32 @@
+<div class="container mx-auto max-w-lg mt-10 p-6 bg-white shadow-md rounded-lg">
+  <h1 class="text-2xl font-semibold mb-6">Employee Details</h1>
+
+  <div class="space-y-4">
+    <div class="flex flex-col">
+      <label for="employee_id" class="font-medium text-gray-700">Employee ID</label>
+      <p><%= @employee.employee_id %></p>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="name" class="font-medium text-gray-700">Name</label>
+      <p><%= @employee.name %></p>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="phone" class="font-medium text-gray-700">Phone</label>
+      <p><%= @employee.phone.presence || 'N/A' %></p>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="registered_at" class="font-medium text-gray-700">Registered At</label>
+      <p><%= @employee.registered_at.strftime("%B %d, %Y %I:%M %p") if @employee.registered_at? %></p>
+    </div>
+  </div>
+
+  <div class="mt-6 flex space-x-4">
+    <%= link_to "Edit", edit_employee_path(@employee), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= link_to "Delete", @employee, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?'},  class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= link_to "Back to List", employees_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+
+</div>
