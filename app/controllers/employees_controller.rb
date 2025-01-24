@@ -3,7 +3,46 @@ class EmployeesController < ApplicationController
 
   # GET /employees or /employees.json
   def index
+    @page = (params[:page] || 1).to_i
+    @per_page = (params[:per_page] || 10).to_i
+    @sort = params[:sort] || "created_at"
+    @direction = params[:direction] || "desc"
+
     @employees = Employee.all
+
+    if params[:query].present?
+      search_query = "%#{params[:query].downcase.strip}%"
+      @employees = @employees.where(
+        "LOWER(employee_id) LIKE :query OR LOWER(name) LIKE :query OR LOWER(phone) LIKE :query",
+        query: search_query
+      )
+    end
+
+    @total_count = @employees.count
+    @employees = @employees.order("#{@sort} #{@direction}")
+                          .page(@page)
+                          .per(@per_page)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        Rails.logger.debug "Search Query: #{params[:query]}"
+        Rails.logger.debug "Total Results: #{@employees.count}"
+
+        if @employees.empty? && params[:query].present?
+          render turbo_stream: turbo_stream.replace(
+            "employees_table",
+            partial: "table_content",
+            locals: { no_results_message: "No employees found matching '#{params[:query]}'" }
+          )
+        else
+          render turbo_stream: turbo_stream.replace(
+            "employees_table",
+            partial: "table_content"
+          )
+        end
+      end
+    end
   end
 
   # GET /employees/1 or /employees/1.json
